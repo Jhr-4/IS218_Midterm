@@ -11,9 +11,9 @@ def setup():
     History.appendHistory(Decimal('30'), Decimal('.5'), Calculator.subtract, Decimal('29.5'))
 
 def test_history(setup):
-    assert History.getLatest() == (Decimal('30'), Decimal('.5'), "subtract", Decimal('29.5')), "Append History Broken" # check append History
+    assert History.getLatest() == (Decimal('30'), Decimal('.5'), "subtract", Decimal('29.5')), "Direct Append History Broken"
     Calculator.add(Decimal('10'), Decimal('100'))
-    assert History.getLatest() == (Decimal('10'), Decimal('100'), "add", Decimal('110')), "Direct Calculation to History Broken"
+    assert History.getLatest() == (Decimal('10'), Decimal('100'), "_add", Decimal('110')), "User Calculation to History Broken"
 
 def test_history_clear(setup):
     History.clearHistory()
