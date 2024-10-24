@@ -1,5 +1,6 @@
 from decimal import Decimal, InvalidOperation
 from abc import ABC, abstractmethod
+import logging
 
 class Command(ABC):
     @abstractmethod
@@ -24,8 +25,11 @@ class CommandHandler:
                 command.execute() 
                 
         except KeyError:
+            logging.warning(f"Invalid Command: {commandStr} was attempted.") 
             print(f"Invalid Command: {commandStr}, Use 'menu' for commands.")
         except ZeroDivisionError as e:
-           print(e) #error from divison 
+            logging.info(f"Division by 0.") 
+            print(e) #error from divison 
         except InvalidOperation:
+            logging.warning(f"Invalid Operands: '{operands[0]}' and '{operands[1]}' were used.")
             print(f"Invalid Operands: {operands[0]} or {operands[1]} is not a valid number.")
