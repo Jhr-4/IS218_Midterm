@@ -8,8 +8,8 @@ def test_AppExit (monkeypatch):
         app.start()
     assert e.type == SystemExit
 
-helpStr = "Commands:\
-              \n- help: This commands menu. \
+menuStr = "Commands:\
+              \n- menu: This commands menu. \
               \n- exit: Exit the app. \
               \n- add <operand1> <operand2>: Add two numbers.\
               \n- subtract <operand1> <operand2>: Subtract two numbers.\
@@ -23,8 +23,8 @@ helpStr = "Commands:\
     ("divide 50 2", "The result of 50 / 2 is 25"),
     ("divide 50 0", "Division by 0: Undefined"),
     ("add 2 a", f"Invalid Operands: 2 or a is not a valid number."),
-    ("wrongCommand 2", f"Invalid Command: wrongCommand, Use 'help' for commands."),
-    ("help", helpStr)
+    ("wrongCommand 2", f"Invalid Command: wrongCommand, Use 'menu' for commands."),
+    ("menu", menuStr)
 ])
 def test_AppOperationCalculations(input, expectedOutput, capfd, monkeypatch):
     inputs = iter([input, "exit"])
