@@ -1,5 +1,7 @@
 import os
+import sys
 import importlib
+from dotenv import load_dotenv
 from app.commands import CommandHandler
 from app.commands import Command
 import logging
@@ -8,11 +10,30 @@ import logging.config
 class App:
     def __init__(self):
         os.makedirs('logs', exist_ok=True)
+        load_dotenv()
+        self.settings = self.load_environment_variables()
+        self.settings.setdefault('ENVIRONMENT', 'PRODUCTION')
+        self.enviornment = self.get_environment_variable()
         self.configure_logging()
         self.commandHandler = CommandHandler()
 
+    def load_environment_variables(self):
+        settings = {}
+        for key, value in os.environ.items():
+            settings[key] = value
+        #logging.info("Environment variables are loaded.") --> not informative enough doesn't say if actual .env vars loaded so useless..
+        return settings
+
+    def get_environment_variable(self, env_var: str = 'ENVIRONMENT'):
+        return self.settings.get(env_var, None)
+
     def configure_logging(self):
-        logging_conf_path = 'logging.conf'
+        #Dynamic logging configuration through environment variables
+        if self.enviornment=='DEVELOPMENT':
+            logging_conf_path = 'logging_configs/logging_dev.conf'
+        else: 
+            logging_conf_path = 'logging_configs/logging_prod.conf'
+
         if os.path.exists(logging_conf_path):
             logging.config.fileConfig(logging_conf_path, disable_existing_loggers=False)
         else:
@@ -49,9 +70,9 @@ class App:
         logging.info("Application started.")
         print("Type \"exit\" to exit.")
         while True:
-            userInput = input(">>> ").strip()
-            userInput = userInput.split() #comma split list
             try:
+                userInput = input(">>> ").strip()
+                userInput = userInput.split() #comma split list
                 command = userInput[0]
                 operands = userInput[1:len(userInput)]
                 self.commandHandler.executeCommand(command, operands)
@@ -62,6 +83,9 @@ class App:
             except TypeError: # happens when just typing operation
                 logging.warning("Required Arguments were Missing.")
                 print ("Required Arguments Missing: Use 'menu' to see proper formatting.")
+            except KeyboardInterrupt:
+                logging.info("Application interrupted and exiting gracefully.")
+                sys.exit("Exiting Calculator Application...")
             except Exception as e: # just incase
                 logging.error("Unhandled Error: " + str(e))
                 print("Unhandled Error: " + str(e))
