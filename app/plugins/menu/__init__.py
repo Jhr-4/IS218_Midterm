@@ -1,9 +1,9 @@
 from app.commands import Command
 
-class HelpCommand(Command):
+class MenuCommand(Command):
     def execute(self):
         print("Commands:\
-              \n- help: This commands menu. \
+              \n- menu: This commands menu. \
               \n- exit: Exit the app. \
               \n- add <operand1> <operand2>: Add two numbers.\
               \n- subtract <operand1> <operand2>: Subtract two numbers.\

@@ -34,8 +34,8 @@ class App:
                 self.commandHandler.executeCommand(command, operands)
 
             except IndexError: # if no arguments or missing arguments
-                print("Arguments were missing: Use 'help' to see proper formating.")
+                print("Arguments were missing: Use 'menu' to see proper formating.")
             except TypeError:
-                print ("Invalid/Missing arguments: Use 'help' to see proper formatting.")
+                print ("Invalid/Missing arguments: Use 'menu' to see proper formatting.")
             except Exception as e:
                 print("Unhandled Error: " + str(e))

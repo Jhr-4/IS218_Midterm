@@ -24,7 +24,7 @@ class CommandHandler:
                 command.execute() 
                 
         except KeyError:
-            print(f"Invalid Command: {commandStr}, Use 'help' for commands.")
+            print(f"Invalid Command: {commandStr}, Use 'menu' for commands.")
         except ZeroDivisionError as e:
            print(e) #error from divison 
         except InvalidOperation:
