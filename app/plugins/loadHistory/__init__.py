@@ -19,7 +19,7 @@ class loadHistoryCommand(Command):
             df_load_history = pd.read_csv(os.path.join(data_dir, name))
         except FileNotFoundError:
             logging.error(f"{os.path.join(data_dir, name)} not found.")
-            print(f"No history file named f{name} found.")
+            print(f"No history file named {name} found.")
 
         try:
             df_curr_history.dropna(axis=1, how='all', inplace=True)

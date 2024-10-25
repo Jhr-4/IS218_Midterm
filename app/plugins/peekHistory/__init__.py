@@ -8,9 +8,13 @@ class peekHistoryCommand(Command):
         logging.info(f"peekHistory Command Used.")
         rows = int(rows)
         path = './data/tempHistory.csv'
-        df_history = pd.read_csv(path)
+        try:
+            df_history = pd.read_csv(path)
 
-        if df_history.empty:
-            print('History Is Empty.')
-        else:
-           print(df_history.tail(rows).to_string())
+            if df_history.empty:
+                print('History Is Empty.')
+            else:
+                print(df_history.tail(rows).to_string())
+        except FileNotFoundError:
+            logging.error(f"{path} not found.")
+            print(f"No history file of {path} found.")
