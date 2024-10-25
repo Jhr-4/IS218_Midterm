@@ -7,3 +7,4 @@ class SubtractCommand(Command):
         calculate = Calculator.subtract(a, b)
         logging.info(f"Used Command Subtract: {a} - {b} = {calculate}.")
         print("The result of " + str(a) + " - " + str(b) + " is " + str(calculate))
+        return calculate

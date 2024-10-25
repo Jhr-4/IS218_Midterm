@@ -6,6 +6,7 @@ from app.commands import CommandHandler
 from app.commands import Command
 import logging
 import logging.config
+from calculator.HistoryInput import HistoryInput
 
 class App:
     def __init__(self):
@@ -16,6 +17,7 @@ class App:
         self.enviornment = self.get_environment_variable()
         self.configure_logging()
         self.commandHandler = CommandHandler()
+        HistoryInput._setup_History()
 
     def load_environment_variables(self):
         settings = {}
@@ -66,16 +68,16 @@ class App:
                     logging.error(f"Error Importing Plugin {pluginFolder}: {e}")
 
     def start(self):
+        logging.info("-----Application Started-----")
         self.enable_plugins()
-        logging.info("Application started.")
         print("Type \"exit\" to exit.")
         while True:
             try:
                 userInput = input(">>> ").strip()
                 userInput = userInput.split() #comma split list
                 command = userInput[0]
-                operands = userInput[1:len(userInput)]
-                self.commandHandler.executeCommand(command, operands)
+                args = userInput[1:len(userInput)]
+                self.commandHandler.executeCommand(command, args)
 
             except IndexError: # if no arguments or missing arguments --> happens when just one argument missing or no command
                 logging.warning("Command or Required Arguments Missing.")
@@ -86,6 +88,9 @@ class App:
             except KeyboardInterrupt:
                 logging.info("Application interrupted and exiting gracefully.")
                 sys.exit("Exiting Calculator Application...")
+            except ValueError:
+                logging.warning(f"Invalid Args Used: {args}")
+                print(f"Invalid Arguments. Use 'menu' to see proper formatting.")
             except Exception as e: # just incase
                 logging.error("Unhandled Error: " + str(e))
                 print("Unhandled Error: " + str(e))
