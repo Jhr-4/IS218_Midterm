@@ -7,3 +7,4 @@ class DivideCommand(Command):
         calculate = Calculator.divide(a, b)
         logging.info(f"Used Command Divide: {a} / {b} = {calculate}.")
         print("The result of " + str(a) + " / " + str(b) + " is " + str(calculate))
+        return calculate

@@ -1,4 +1,4 @@
-from calculator.History import History
+from calculator.HistoryInput import HistoryInput
 from decimal import Decimal
 from typing import Callable
 
@@ -8,7 +8,7 @@ class Calculator:
 #_execute calculates and adds to history 
     def _execute(a: Decimal, b: Decimal, operation: Callable[[Decimal,Decimal],Decimal]):
         result = operation(a, b)
-        History.appendHistory(a, b, operation, result)
+        HistoryInput._appendHistory(a, b, operation, result)
         return result
 
 #Operations called by user
@@ -31,7 +31,7 @@ class Calculator:
         return Calculator._execute(a, b, Calculator._divide)
     
 
-#Direct Operations Only called by _perform 
+#Direct Operations Only called by _execute 
 
     @staticmethod
     def _add(a: Decimal, b: Decimal) -> Decimal:
