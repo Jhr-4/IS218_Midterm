@@ -25,5 +25,4 @@ class saveHistoryCommand(Command):
                 logging.info(f"Created a copy CSV at '{csv_file_path}'.")
                 
         except FileNotFoundError:
-            logging.error(f"{os.path.join(data_dir, data_csv)} not found.")
-            print("The default temporary history file is missing.")
+            logging.error(f"Default temporary file {os.path.join(data_dir, data_csv)} not found.")

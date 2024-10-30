@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 class EnvSettings:
 
-    envlogs = {}
+    envlogs = {} #log configuration is dependent on enviornment => hasn't been loaded yet => using dict to store and later display messages
     _settings = {}
 
     @classmethod

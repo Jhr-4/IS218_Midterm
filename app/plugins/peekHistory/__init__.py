@@ -17,5 +17,4 @@ class peekHistoryCommand(Command):
             else:
                 print(df_history.tail(rows).to_string())
         except FileNotFoundError:
-            logging.error(f"{path} not found.")
-            print(f"No history file of {path} found.")
+            logging.error(f"History file '{path}' not found.")

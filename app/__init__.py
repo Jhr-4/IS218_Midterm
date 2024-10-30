@@ -74,23 +74,22 @@ class App:
         while True:
             try:
                 userInput = input(">>> ").strip()
-                userInput = userInput.split() #comma split list
-                command = userInput[0]
-                args = userInput[1:len(userInput)]
+                userInputList = userInput.split() #comma split list
+                command = userInputList[0]
+                args = userInputList[1:len(userInputList)]
                 self.commandHandler.executeCommand(command, args)
 
             except IndexError: # if no arguments or missing arguments --> happens when just one argument missing or no command
-                logging.warning("Command or Required Arguments Missing.")
+                logging.warning(f"Command or Required Arguments Missing. Used: '{userInput}'")
                 print("Command or Required Arguments Missing: Use 'menu' to see proper formating.")
             except TypeError: # happens when just typing operation
-                logging.warning("Required Arguments were Missing.")
+                logging.warning(f"Required Arguments were Missing. Used: '{userInput}'")
                 print ("Required Arguments Missing: Use 'menu' to see proper formatting.")
             except KeyboardInterrupt:
                 logging.info("Application interrupted and exiting gracefully.")
                 sys.exit("Exiting Calculator Application...")
             except ValueError:
-                logging.warning(f"Invalid Args Used: {args}")
+                logging.warning(f"Invalid Args Used: '{userInput}'")
                 print(f"Invalid Arguments. Use 'menu' to see proper formatting.")
             except Exception as e: # just incase
                 logging.error("Unhandled Error: " + str(e))
-                print("Unhandled Error: " + str(e))

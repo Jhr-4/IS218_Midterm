@@ -9,6 +9,7 @@ from app.plugins.peekHistory import peekHistoryCommand
 from app.plugins.clearHistory import clearHistoryCommand
 from app.plugins.saveHistory import saveHistoryCommand
 from app.plugins.loadHistory import loadHistoryCommand
+from app.EnvSettings import EnvSettings
 
 class TestHistory:
     @pytest.fixture
@@ -33,10 +34,10 @@ class TestHistory:
             f'{Decimal("100")}' in captured.out and 
             "+" in captured.out and
             f'{Decimal("110")}' in captured.out), "User Calculation into History Broken"
-        os.remove('./data/tempHistory.csv')
+        os.remove(os.path.join(EnvSettings.get_history_dir_variable(),'tempHistory.csv'))
         self.peekHistory.execute()
         captured = capfd.readouterr()
-        assert "No history file of ./data/tempHistory.csv found."
+        assert f"No history file of '{os.path.join(EnvSettings.get_history_dir_variable(),'tempHistory.csv')}' found."
         app = App()
 
     def test_history_clear(self, capfd, setup):
@@ -47,18 +48,17 @@ class TestHistory:
 
     def test_history_save(self, capfd, setup):
         self.saveHistory.execute('pytestData')
-        rows = pd.read_csv('./data/pytestData.csv').shape[0]
+        rows = pd.read_csv(os.path.join(EnvSettings.get_history_dir_variable(),'pytestData.csv')).shape[0]
         assert rows == 2
         self.clearHistory.execute()
         self.saveHistory.execute('pytestData')
         captured = capfd.readouterr()
         assert 'History Is Empty, Nothing to Save.' in captured.out, "Save Empty History Has Problem"
 
-    def test_history_load(self, capfd, setup):
+    def test_history_load(self, caplog, setup):
         self.loadHistory.execute('pytestData')
-        rows = pd.read_csv('./data/tempHistory.csv').shape[0]
+        rows = pd.read_csv(os.path.join(EnvSettings.get_history_dir_variable(),'tempHistory.csv')).shape[0]
         assert rows == 4
-        os.remove('./data/pytestData.csv')
+        os.remove(os.path.join(EnvSettings.get_history_dir_variable(),'pytestData.csv'))
         self.loadHistory.execute('pytestData')
-        captured = capfd.readouterr()
-        assert 'No history file named pytestData.csv found.' in  captured.out
+        assert f"{os.path.join(EnvSettings.get_history_dir_variable(), 'pytestData.csv')} not found." in  caplog.text, "Load History Has Problem"
