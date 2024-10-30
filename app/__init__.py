@@ -4,6 +4,7 @@ import importlib
 from dotenv import load_dotenv
 from app.commands import CommandHandler
 from app.commands import Command
+from app.EnvSettings import EnvSettings
 import logging
 import logging.config
 from calculator.HistoryInput import HistoryInput
@@ -11,34 +12,33 @@ from calculator.HistoryInput import HistoryInput
 class App:
     def __init__(self):
         os.makedirs('logs', exist_ok=True)
-        load_dotenv()
-        self.settings = self.load_environment_variables()
-        self.settings.setdefault('ENVIRONMENT', 'PRODUCTION')
-        self.enviornment = self.get_environment_variable()
+        EnvSettings.load_environment_variables()
+        self.environment = EnvSettings.get_environment_variable()
+        self.history_dir = EnvSettings.get_history_dir_variable()
         self.configure_logging()
+        for level in EnvSettings.envlogs:
+            for messages in EnvSettings.envlogs[level]:
+                #for message in messages:
+                if level == 'warning':
+                    logging.warning(messages)
+                if level == 'error':
+                    logging.error(messages)
+
         self.commandHandler = CommandHandler()
         HistoryInput._setup_History()
 
-    def load_environment_variables(self):
-        settings = {}
-        for key, value in os.environ.items():
-            settings[key] = value
-        #logging.info("Environment variables are loaded.") --> not informative enough doesn't say if actual .env vars loaded so useless..
-        return settings
-
-    def get_environment_variable(self, env_var: str = 'ENVIRONMENT'):
-        return self.settings.get(env_var, None)
 
     def configure_logging(self):
         #Dynamic logging configuration through environment variables
-        if self.enviornment=='DEVELOPMENT':
+        if self.environment=='DEVELOPMENT':
             logging_conf_path = 'logging_configs/logging_dev.conf'
         else: 
             logging_conf_path = 'logging_configs/logging_prod.conf'
 
-        if os.path.exists(logging_conf_path):
+        try:
             logging.config.fileConfig(logging_conf_path, disable_existing_loggers=False)
-        else:
+        except FileNotFoundError:
+            logging.warning("Logging config file not found. Set to basicConfig.")
             logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
         logging.info("Logging configured.")
 
@@ -74,23 +74,22 @@ class App:
         while True:
             try:
                 userInput = input(">>> ").strip()
-                userInput = userInput.split() #comma split list
-                command = userInput[0]
-                args = userInput[1:len(userInput)]
+                userInputList = userInput.split() #comma split list
+                command = userInputList[0]
+                args = userInputList[1:len(userInputList)]
                 self.commandHandler.executeCommand(command, args)
 
             except IndexError: # if no arguments or missing arguments --> happens when just one argument missing or no command
-                logging.warning("Command or Required Arguments Missing.")
+                logging.warning(f"Command or Required Arguments Missing. Used: '{userInput}'")
                 print("Command or Required Arguments Missing: Use 'menu' to see proper formating.")
             except TypeError: # happens when just typing operation
-                logging.warning("Required Arguments were Missing.")
+                logging.warning(f"Required Arguments were Missing. Used: '{userInput}'")
                 print ("Required Arguments Missing: Use 'menu' to see proper formatting.")
             except KeyboardInterrupt:
                 logging.info("Application interrupted and exiting gracefully.")
                 sys.exit("Exiting Calculator Application...")
             except ValueError:
-                logging.warning(f"Invalid Args Used: {args}")
+                logging.warning(f"Invalid Args Used: '{userInput}'")
                 print(f"Invalid Arguments. Use 'menu' to see proper formatting.")
             except Exception as e: # just incase
                 logging.error("Unhandled Error: " + str(e))
-                print("Unhandled Error: " + str(e))
