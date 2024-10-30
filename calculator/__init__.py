@@ -12,7 +12,6 @@ class Calculator:
         return result
 
 #Operations called by user
-
     @staticmethod
     def add(a: Decimal, b:Decimal) -> Decimal:
         return Calculator._execute(a, b, Calculator._add)
@@ -32,7 +31,6 @@ class Calculator:
     
 
 #Direct Operations Only called by _execute 
-
     @staticmethod
     def _add(a: Decimal, b: Decimal) -> Decimal:
         return a+b

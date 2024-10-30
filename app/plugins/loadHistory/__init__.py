@@ -2,12 +2,13 @@ import os
 from app.commands import Command
 import logging
 import pandas as pd
+from app.EnvSettings import EnvSettings
 
 class loadHistoryCommand(Command):
     def execute(self, name: str):
 
         name = name+".csv"
-        data_dir = './data'
+        data_dir = EnvSettings.get_history_dir_variable()
         data_csv = 'tempHistory.csv'
 
         try:
