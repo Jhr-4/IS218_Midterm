@@ -17,7 +17,7 @@ class EnvSettings:
         if (not (cls._settings['HISTORY_DIR'] == './data')):
             cls.check_dir() # checks if the user has put their own history_dir
         cls.envlogs["info"] = [f"Environment variables loaded."]
-        print(f"Logging is set to {cls._settings['HISTORY_DIR']}")
+        print(f"History saving is set to {cls._settings['HISTORY_DIR']}")
 
     @classmethod
     def check_dir(cls):
