@@ -8,6 +8,7 @@ class loadHistoryCommand(Command):
     def execute(self, name: str):
 
         user_csv = name+".csv"
+        logging.info(f"loadHistory on Command Used on {user_csv}")
         data_dir = EnvSettings.get_history_dir_variable()
         temp_data_csv = 'tempHistory.csv'
 

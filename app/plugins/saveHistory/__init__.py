@@ -9,6 +9,7 @@ class saveHistoryCommand(Command):
     def execute(self, name: str):
 
         name = name+".csv"
+        logging.info(f"saveHistory on Command Used on {name}")
         data_dir = EnvSettings.get_history_dir_variable()
         data_csv = 'tempHistory.csv'
 
