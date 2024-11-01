@@ -35,7 +35,11 @@ Furthermore, a functional history was added to save the commands to a .csv file 
   * The history .csv can be saved with `saveHistory <name>` and reloaded using `loadHistory <name>`.
 
 # Design Patterns
-One important pattern I utilized was adding a "_" to functions that were intended for internal use. This helped create seperation between what should be called and what should be kept only in a file or not by a user. Another important pattern I used was creating a working calculator outside of the application this is important as it allowed for easy troubleshooting. If there was an error with the arithmetic the problem can be isolated and targeted directly into the calculator/operations folder while if there's an error in the actual CLI the focus should be in the app files. Additionally, another design pattern was type hinting in certain functions allowing it to be clear on what type of parameters they take and what they return. This not only helps with the readability, but also can help prevent errors of types later on. 
+One important design pattern used was [Single Responsibility](https://www.cleancode.studio/design-patterns/single-responsibility-design-pattern), which ensures modularity. For example, everything is separate from the calculator, history, to the actual app. Each one of these things has smaller functions like [add and subtract](https://github.com/Jhr-4/IS218_Midterm/blob/main/calculator/__init__.py) that does one specific task. This allows errors to be found easily and also it to be easily read. 
+
+Another design pattern used was the [Facade design pattern](https://www.geeksforgeeks.org/facade-design-pattern-introduction/) which was utilized in the CLI. Users only have access to certain commands from the plugins and can't use or see anything that is occurring behind the scene. This is a facade as it masks and hides all the complexity behind the scenes.  
+
+Additionally, a similar pattern to Singleton is utilized as the [EnvSettings](https://github.com/Jhr-4/IS218_Midterm/blob/main/app/EnvSettings.py) only gets created once and is referred to by a get function afterwards across multiple files. However, it's not fully singleton as the code doesn't ensure only one instance is created. 
 
 # Analysis of Architectural Decisions
 ### Logging & Environment Variable:
