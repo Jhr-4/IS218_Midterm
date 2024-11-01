@@ -2,6 +2,8 @@
 
 This is a Python Calculator CLI application. It allows users to do simple math (add, subtract, multiply, divide) with a working history with pandas that can be cleared, saved, and reloaded.
 
+# [Video Demonstration](https://www.youtube.com/watch?v=WA_Qok1SIU0)
+
 # Set Up Instructions
 
 ### Setup App/Project
@@ -23,7 +25,7 @@ This is a Python Calculator CLI application. It allows users to do simple math (
 - To test the code with the written tests utilize `pytest` and to check coverage use `pytest --cov` 
 
 # Usage
-After running the application with `python main.py`, the list of commands can be obtained by typing menu. This will give all the functionality of the app.
+After running the application with `python main.py`, the list of commands can be obtained by typing `menu`. This will give all the functionality of the app.
 
 To summarize the application can perform addition, subtraction, multiplication, and division of 2 digit numbers (decimal & integers).
   * The command looks general command `<operation> <operand1> <operand2>`
@@ -48,9 +50,11 @@ The actual logging process utilized different levels such as DEBUG, INFO, WARNIN
 * WARNINGS are also similar in that they are normal and occur when there's a minor error that occurs such as an user typing in an invalid argument. 
 * ERROR level however, is alittle more serious as it indicates errors that were due to something like a file not found or an unhandled/unexpected error. 
 
+#### [More Information on Logging](https://docs.python.org/3/howto/logging.html)
+
 ### History and DIR Variable:
 * To make the history work pandas was utilized which creates a .csv and saves the operations the user runs. There is also functionality to save the history and load a saved history. To allow users to save the files outside of the program the environment variable HISTORY_DIR was used to allow users to specify where they want the history to go instead of directly occurring in the program.  
-
+  * To see the code on how .env variables were loaded: [app/EnvSettings.py](https://github.com/Jhr-4/IS218_Midterm/blob/main/app/EnvSettings.py)
 
 ### LBYL & EAFP
 In this project there are many instances of LBYL and EAFP. Both were required as some areas required conditions to be checked while others it was efficient and better to have error handling
@@ -58,3 +62,5 @@ In this project there are many instances of LBYL and EAFP. Both were required as
 * One area where LBYL is utilized is when looking at the commands and arguments the user passes in. This is because the amount of parameters had to be checked. For some commands it required 1 pparameter while others required 2. While this could potentially be implemented with EAFP it would be quite inefficient as each command would run expecting an error till the real command runs. This example can be found here [app/commands/\_\_init\_\_.py](https://github.com/Jhr-4/IS218_Midterm/blob/main/app/commands/__init__.py). Furthermore, in the history files to check if a file exists and is writable it made sense to use if statements to check the conditions rather than directly using a try catch.
 
 * One area where EAFP was used was in the actual commands. Instead of having tons of if statements that can potentially slow the application down, error handling was utilized to allow the correct command to run and then throw an error message if there was something wrong. For example, instead of having a if statement to check if the command actually exists in a dictionary and then running it could slow down the application if there are too many commands. Therefore, it was more beneficial to just run the command given by the user and have exception handling if the command isn't found. Another example can be seen in the actual running of commands, instead of having multiple if statements to check if the arguments are correct, the command is just ran and gives an exception if something is wrong. These examples can be found here [app/\_\_init\_\_.py](https://github.com/Jhr-4/IS218_Midterm/blob/main/app/__init__.py) & [app/commands/\_\_init\_\_.py](https://github.com/Jhr-4/IS218_Midterm/blob/main/app/commands/__init__.py)
+
+#### [More Information on LBYL vs. EAFP](https://realpython.com/python-lbyl-vs-eafp/)
